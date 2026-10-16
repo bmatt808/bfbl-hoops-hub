@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BFBL Hoops Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&amp;family=VT323&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{--bg:#fff3d6;--cd:#fffaf0;--ink:#14213d;--nv:#14213d;--or:#e8590c;--mu:#fca311;--ln:#d8c3a0}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1324;--cd:#15233f;--ink:#fff3d6;--ln:#2d3f66}}
+:root[data-theme=dark]{--bg:#0b1324;--cd:#15233f;--ink:#fff3d6;--ln:#2d3f66}
+body{margin:0;background:var(--bg) radial-gradient(#e8590c22 1.5px,transparent 1.5px);background-size:14px 14px;color:var(--ink);font:15px/1.4 system-ui,sans-serif;padding:env(safe-area-inset-top,0) 0 calc(78px + env(safe-area-inset-bottom,0))}
+h1,h2,.bg,.btn,nav b,.wk b{font-family:Bungee,Impact,sans-serif;font-weight:400}
+.hd{background:var(--nv);color:var(--mu);padding:12px 16px 8px;border-bottom:6px solid var(--or);display:flex;gap:12px;align-items:center;justify-content:space-between}
+.hd h1{margin:0;font-size:28px;letter-spacing:2px;text-shadow:3px 3px 0 var(--or)}
+.hd small{display:block;color:#fff3d6;font:11px system-ui;letter-spacing:3px}
+.ball{font-size:36px;cursor:pointer;animation:bn .8s infinite alternate ease-in}
+@keyframes bn{to{transform:translateY(-9px) rotate(180deg)}}
+.court{height:12px;background:repeating-linear-gradient(90deg,#c98b4a 0 28px,#b9783a 28px 56px);border-bottom:3px solid #7a4b1e}
+main{padding:12px;max-width:760px;margin:auto}
+.sb{background:#1a1a1a;color:#ffb000;font-family:VT323,'Courier New',monospace;border:4px solid #444;border-radius:10px;padding:10px 14px;box-shadow:0 0 0 3px var(--or),0 6px 0 #0006}
+.sb .big{font-size:30px;line-height:1;text-shadow:0 0 8px #ffb00099}
+.sb .rl{color:#fff3d6;font-size:20px;margin:4px 0}
+.sb .lr{color:#ff7a3d;font-size:20px;overflow:hidden;white-space:nowrap}
+.sb .lr span{display:inline-block;padding-left:100%;animation:mq 16s linear infinite}
+@keyframes mq{to{transform:translateX(-100%)}}
+.blink{animation:bl 1s steps(2) infinite}@keyframes bl{50%{opacity:.2}}
+h2{font-size:16px;color:var(--or);margin:18px 2px 8px;letter-spacing:1px}
+.cd{background:var(--cd);border:2px solid var(--ln);border-radius:10px;padding:10px;margin-bottom:8px}
+.now{border-color:var(--mu);box-shadow:0 0 0 3px var(--mu)}
+table{width:100%;border-collapse:collapse}
+.lb{background:#1a1a1a;border-radius:10px;overflow:hidden;font:20px VT323,'Courier New',monospace;color:#ffb000;box-shadow:0 0 0 3px var(--or)}
+.lb th{font:10px system-ui;letter-spacing:1px;color:#fff3d6;background:var(--nv);padding:7px 2px}
+.lb td{padding:3px 3px;text-align:center;border-bottom:1px solid #333}
+.lb td:nth-child(2){text-align:left;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb tr:nth-child(-n+4) td{color:#fff}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--nv);border-top:4px solid var(--or);padding-bottom:env(safe-area-inset-bottom,0);z-index:9}
+nav b{flex:1;text-align:center;padding:9px 0 7px;color:#fff3d6;font-size:10px;cursor:pointer}
+nav b.on{color:var(--mu);background:#0007}
+nav i{display:block;font-size:20px;font-style:normal}
+.chip{display:inline-block;border-radius:99px;padding:2px 10px;background:var(--mu);color:#14213d;font-weight:700}
+.chip.t{background:var(--or);color:#fff}
+.wk{display:flex;gap:6px;overflow-x:auto;padding:4px 2px}
+.wk b{min-width:40px;text-align:center;padding:7px 0;border-radius:8px;background:var(--cd);border:2px solid var(--ln);cursor:pointer}
+.wk b.on{background:var(--or);color:#fff;border-color:var(--or)}
+td.w{background:#fca31166;font-weight:700}
+.mt td{text-align:center;padding:2px 3px;border-bottom:1px dashed var(--ln)}
+input,select{font:inherit;color:inherit;background:var(--cd);border:1.5px solid var(--ln);border-radius:6px;padding:5px;width:100%;min-width:0}
+.mt input{text-align:center;padding:3px}
+.btn{background:var(--or);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px}
+.fab{position:fixed;right:12px;bottom:calc(86px + env(safe-area-inset-bottom,0));z-index:10;box-shadow:0 4px 0 #0006}
+small{opacity:.75}
+
+/* header toolbar */
+.hd-tools{display:flex;gap:8px;align-items:center}
+.hd-tools button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:12px}
+.hd-tools button.on{background:var(--mu);color:#14213d;border-color:var(--mu)}
+.hidden-file{display:none}
+</style></head><body>
+<div id="app"></div>
+
+<!-- initial state -->
+<script type="application/json" id="st">{"teams":["The Triple Singles","Honolulu Coconuts","ShaqTin A Fool All-Stars","The Destroyer","Active Chuter","Commish","Dillon Brooks Filet-O-Fish","Cowgirls Dont Kawhi","Pritchard Promoter","99 Problems But A Swish Aint One","Mikey Gs Rec Team","Shamwows"],"w":{"1":[{"a":"","b":"","A":{},"B":{}}]},"tb":{},"po":["","",""]}</script>
+
+<script>
+/*
+  BFBL Hoops Hub - static-friendly build
+  - Editing toggled from header
+  - Saves to localStorage
+  - Export / Import state (JSON)
+  - Export full HTML snapshot (with state embedded)
+*/
+
+const K=['fgm','fga','ftm','fta','tpm','pts','reb','ast','stl','blk','to','gp','gs'];
+const CATK=['fg','ft','tpm','pts','reb','ast','stl','blk','to'];
+const ROWS=[['FGM','fgm'],['FGA','fga'],['FG%','fg'],['FTM','ftm'],['FTA','fta'],['FT%','ft'],['3PM','tpm'],['PTS','pts'],['REB','reb'],['AST','ast'],['STL','stl'],['BLK','blk'],['TO (fewer wins)','to'],['Games played','gp'],['Games started','gs']];
+const CH=[
+['The Scoring Champ','Most total Points (PTS) scored by your active roster.','PTS','MAX'],
+['The Floor General','Most total Assists (AST) generated in the week.','AST','MAX'],
+['The Glass Cleaner','Most total Rebounds (REB) pulled down.','REB','MAX'],
+['The Sharpshooter','Most 3-Pointers Made (3PM) across all active players.','3PM','MAX'],
+['The Thief','Most total Steals (STL) recorded.','STL','MAX'],
+['The Paint Protector','Most total Blocks (BLK) swatted away.','BLK','MAX'],
+['Efficiency Expert','Highest FG%. Minimum 40 attempts required.','FG','MAX'],
+['Ice in the Veins','Highest FT%. Minimum 30 attempts required.','FT','MAX'],
+['The Cleanest Game','Fewest Turnovers (TO). Minimum 15 player games played.','TO','MIN'],
+['The Bad Beat','Highest PTS among all teams that lost their weekly matchup.','BADBEAT','MAX'],
+['The Stock Market','Most combined Steals + Blocks ("Stocks") recorded.','STOCKS','MAX'],
+['The Triple Threat','Most combined PTS + REB + AST.','TRIPLE','MAX'],
+['The Floor General Pt. II','Most total Assists (AST) generated in the week.','AST','MAX'],
+['The Glass Cleaner Pt. II','Most total Rebounds (REB) pulled down.','REB','MAX'],
+['The Narrow Escape','Winning a matchup by the smallest margin (e.g., a 5-4 win).','NARROW','MIN'],
+['The Sharpshooter Pt. II','Most 3-Pointers Made (3PM) across all active players.','3PM','MAX'],
+['Efficiency Pt. II','Highest FG%. Minimum 40 attempts required.','FG','MAX'],
+['The Blowout','Largest margin of victory across the league (e.g., 8-1 or 9-0).','BLOWOUT','MAX'],
+['The Cleanest Game Pt. II','Fewest Turnovers (TO). Minimum 15 player games played.','TO','MIN'],
+['The Ironman','Most total player games started in the final challenge week.','IRONMAN','MAX']];
+const N=v=>v==null||v===''?NaN:+v;
+const val=(s,k)=>k=='fg'?(N(s.fga)>0?N(s.fgm)/N(s.fga):NaN):k=='ft'?(N(s.fta)>0?N(s.ftm)/N(s.fta):NaN):N(s[k]);
+const MET={PTS:s=>N(s.pts),AST:s=>N(s.ast),REB:s=>N(s.reb),'3PM':s=>N(s.tpm),STL:s=>N(s.stl),BLK:s=>N(s.blk),FG:s=>val(s,'fg'),FT:s=>val(s,'ft'),TO:s=>N(s.to),STOCKS:s=>N(s.stl)+N(s.blk),TRIPLE:s=>N(s.pts)+N(s.reb)+N(s.ast),BADBEAT:(s,r)=>r&&r.r=='L'?N(s.pts):NaN,NARROW:(s,r)=>r&&r.r=='W'?r.g:NaN,BLOWOUT:(s,r)=>r&&r.r=='W'?r.g:NaN,IRONMAN:s=>N(s.gs)};
+const esc=s=>String(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tn=i=>i===''||i==null?'?':(S.teams[i]||'').trim()||'Team '+(+i+1);
+const fv=(k,v)=>k=='FG'||k=='FT'?(v*100).toFixed(1)+'%':v;
+
+let tab='home',WK=1,ED=false,dirty=false;
+let S; // state object
+
+// load initial state (prefer localStorage if present)
+(function loadState(){
+  const saved = localStorage.getItem('bfbl_state');
+  const editPref = localStorage.getItem('bfbl_edit');
+  ED = editPref === '1';
+  try{
+    const defaultState = JSON.parse(document.getElementById('st').textContent);
+    if(saved){
+      S = JSON.parse(saved);
+      // ensure expected keys exist (backwards compatible)
+      S.w = S.w || defaultState.w || {};
+      S.tb = S.tb || defaultState.tb || {};
+      S.po = S.po || defaultState.po || ["","",""];
+      S.teams = S.teams || defaultState.teams || [];
+    } else {
+      S = defaultState;
+    }
+  }catch(e){
+    S = {"teams":[],"w":{},"tb":{},"po":["","",""]};
+  }
+})();
+
+const $=id=>document.getElementById(id);
+
+function mark(){ if(!dirty){ dirty=true; render(); } }
+function saveState(){
+  try{
+    localStorage.setItem('bfbl_state', JSON.stringify(S));
+    dirty=false;
+    render();
+    return true;
+  }catch(e){
+    alert('Could not save: '+(e&&e.message||e));
+    return false;
+  }
+}
+function exportStateJSON(){
+  const blob = new Blob([JSON.stringify(S, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='bfbl-state.json'; a.click(); URL.revokeObjectURL(url);
+}
+function exportFullHTML(){
+  // embed state into a copy of the document, set #st text to JSON
+  const clone = document.documentElement.cloneNode(true);
+  const st = clone.querySelector('#st');
+  if(st) st.textContent = JSON.stringify(S).replace(/</g,'\\u003c');
+  const html = '<!doctype html>\n' + clone.outerHTML;
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='index.html'; a.click(); URL.revokeObjectURL(url);
+}
+function importStateFile(file){
+  const r=new FileReader();
+  r.onload = e=>{
+    try{
+      const parsed = JSON.parse(e.target.result);
+      // basic validation
+      if(!parsed.teams || !parsed.w) throw new Error('Not a valid BFBL state file');
+      S = parsed;
+      saveState();
+      alert('State imported and saved to localStorage.');
+    }catch(err){
+      alert('Import failed: '+err.message);
+    }
+    render();
+  };
+  r.readAsText(file);
+}
+
+function toggleEdit(){
+  ED = !ED;
+  localStorage.setItem('bfbl_edit', ED? '1':'0');
+  render();
+}
+
+/* scoring logic (unchanged from original) */
+function match(m){let w=0,l=0,t=0,d=[];for(const k of CATK){const x=val(m.A,k),y=val(m.B,k);if(isNaN(x)||isNaN(y))return null;const c=x==y?0:(k=='to'?x<y:x>y)?1:-1;d.push(c);c>0?w++:c<0?l++:t++}return{w,l,t,d,r:w>l?'W':w<l?'L':'T',g:Math.abs(w-l)}}
+const sumT=m=>{const r=match(m);return r?`${esc(tn(m.a))} ${r.w}-${r.l}${r.t?'-'+r.t:''} ${esc(tn(m.b))}`:'ENTER ALL 9 CATEGORIES'};
+
+function calc(){
+ const T=S.teams.map(()=>({W:0,L:0,T:0,cw:0,cl:0,ct:0,c:0,p:0})),R=[],F={W:'L',L:'W',T:'T'};let latest=0;
+ for(let w=1;w<=20;w++){
+  const ent=[],ch=CH[w-1],key=ch[2];
+  for(const m of S.w[w]||[]){
+   if(K.some(k=>!isNaN(N(m.A[k]))||!isNaN(N(m.B[k]))))latest=w;
+   if(m.a===''||m.b===''||m.a===m.b)continue;
+   const r=match(m);
+   if(r){const a=T[m.a],b=T[m.b];a[r.r]++;b[F[r.r]]++;a.cw+=r.w;a.cl+=r.l;a.ct+=r.t;b.cw+=r.l;b.cl+=r.w;b.ct+=r.t}
+   ent.push({t:m.a,s:m.A,r:r&&{r:r.r,g:r.g}},{t:m.b,s:m.B,r:r&&{r:F[r.r],g:r.g}});
+  }
+  const cand=ent.map(e=>({t:e.t,s:e.s,v:MET[key](e.s,e.r)})).filter(x=>!isNaN(x.v)&&(key=='FG'?N(x.s.fga)>=40:key=='FT'?N(x.s.fta)>=30:key=='TO'?N(x.s.gp)>=15:1));
+  let win=[],best=NaN;
+  if(cand.length){const vs=cand.map(x=>x.v);best=ch[3]=='MIN'?Math.min(...vs):Math.max(...vs);win=cand.filter(x=>x.v==best).map(x=>x.t)}
+  const pk=S.tb[w]!==undefined&&S.tb[w]!=='';
+  const pkv=pk?+S.tb[w]:null,fin=pkv!==null?pkv:win.length==1?win[0]:null;
+  if(fin!==null){T[fin].c++;T[fin].p+=5}
+  R[w]={win,best,fin,tie:pk===false&&win.length>1};
+ }
+ S.po.forEach((t,i)=>{if(t!=='')T[+t].p+=[125,50,25][i]});
+ const ord=S.teams.map((n,i)=>n.trim()?i:-1).filter(i=>i>=0).sort((a,b)=>(T[b].W+T[b].T/2)-(T[a].W+T[a].T/2)||(T[b].cw-T[b].cl)-(T[a].cw-T[a].cl)||a-b);
+ return{T,R,ord,latest,now:latest>=20?20:latest+1};
+}
+
+/* UI rendering (mostly unchanged) */
+function home(){
+ const c=calc(),n=c.now,L=c.latest,done=L>=20,f=c.R[L];
+ const wt=!L?'NO RESULTS YET - ENTER WEEK 1 SCORES':`LAST RESULT: WK ${L} ${CH[L-1][0].toUpperCase()} - `+(f.fin!==null?esc(tn(f.fin)).toUpperCase()+' WINS $5':f.tie?'TIE - TIEBREAK NEEDED':'WINNER PENDING');
+ let h=`<div class=sb><div class=big>${done?'SEASON COMPLETE - PLAYOFFS!':`THIS WEEK: WK ${n} - ${CH[n-1][0].toUpperCase()}`}</div><div class=rl>${done?'1ST $125 · 2ND $50 · 3RD $25':CH[n-1][1]}</div><div class=lr><span>🏀 ${wt} 🏀</span></div></div>`;
+ h+='<h2>Standings</h2><table class=lb><tr><th>#<th>TEAM<th>W-L-T<th>CATS<th>+/-<th>$</tr>';
+ c.ord.forEach((t,i)=>{const x=c.T[t];h+=`<tr><td>${['🥇','🥈','🥉'][i]||i+1}<td>${esc(tn(t))}${x.c?' 🏆'+x.c:''}<td>${x.W}-${x.L}-${x.T}<td>${x.cw}-${x.cl}-${x.ct}<td>${x.cw-x.cl}<td>$${x.p}</tr>`});
+ return h+'</table><p><small>Ranked by wins (ties = half), then category differential. 🏆 = weekly challenge wins. $ = winnings so far.</small></p>';
+}
+
+function chal(){
+ const c=calc();
+ return '<h2>Weekly $5 Challenges</h2>'+CH.map((x,i)=>{
+  const w=i+1,r=c.R[w],now=w==c.now&&c.latest<20,hasTb=S.tb[w]!==undefined&&S.tb[w]!=='';
+  const wn=r.fin!==null?`<span class=chip>🏆 ${esc(tn(r.fin))}</span>`:r.tie?`<span class="chip t">TIE: ${r.win.map(t=>esc(tn(t))).join(', ')}</span>`:'<small>TBD</small>';
+  const tb=ED&&(r.tie||hasTb)?`<div style="margin-top:6px"><small>Tiebreak pick</small><select data-tb="${w}">${opts(S.tb[w])}</select></div>`:'';
+  return `<div class="cd${now?' now':''}"><div class=bg style="font-size:12px">WEEK ${w}${now?' <span class=blink style="color:var(--or)">● NOW PLAYING</span>':''}</div><b>${x[0]}</b><div><small>${x[1]}</small></div><div style="margin-top:6px">${wn}${!isNaN(r.best)&&r.fin!==null?' <small>'+fv(x[2],r.best)+'</small>':''}</div>${tb}</div>`}).join('');
+}
+
+function opts(sel){
+  return '<option value="">Pick team</option>'+S.teams.map((n,i)=>n.trim()?`<option value="${i}"${sel!==''&&sel!=null&&+sel===i?' selected':''}>${esc(n)}</option>`:'').join('');
+}
+
+function scores(){
+ const ms=S.w[WK]||(S.w[WK]=[]);
+ let h='<h2>Scores</h2><div class=wk>'+[...Array(20)].map((_,i)=>`<b class="${i+1==WK?'on':''}" data-wk="${i+1}">${i+1}</b>`).join('')+'</div>';
+ h+=`<p style="margin:8px 2px"><b>Week ${WK}:</b> ${CH[WK-1][0]}</p>`;
+ if(!ms.length&&!ED)h+='<div class=cd><small>No scores entered for this week yet.</small></div>';
+ ms.forEach((m,i)=>{
+  const r=match(m);
+  h+=`<div class=cd><div style="display:flex;gap:6px;align-items:center">${ED?`<select data-ab=a data-m=${i}>${opts(m.a)}</select><small>vs</small><select data-ab=b data-m=${i}>${opts(m.b)}</select><button class=btn data-del=${i}>✕</button>`:`<b>${esc(tn(m.a))} vs ${esc(tn(m.b))}</b>`}</div><div class=bg id=sum${i} style="text-align:center;font-size:17px;margin:8px 0">${sumT(m)}</div><table class=mt>`;
+  ROWS.forEach(([lb,k])=>{
+   const ci=CATK.indexOf(k),cl=k=='fg'||k=='ft';
+   const cell=(s,sd)=>{
+    if(cl||!ED){const v=cl?val(m[s],k):m[s][k],ok=!(v==null||v==''||(typeof v=='number'&&isNaN(v)));return `<td class="${r&&ci>=0&&sd*r.d[ci]>0?'w':''}">${ok?cl?(v*100).toFixed(1)+'%':esc(v):'–'}</td>`}
+    return `<td><input type=number inputmode=decimal data-m=${i} data-s=${s} data-k=${k} value="${esc(m[s][k]??'')}"></td>`};
+   h+=`<tr>${cell('A',1)}<td style="font-size:11px;opacity:.75;width:34%">${lb}</td>${cell('B',-1)}</tr>`;
+  });
+  h+='</table></div>';
+ });
+ if(ED&&ms.length<6)h+='<button class=btn data-add>+ ADD MATCHUP</button>';
+ return h;
+}
+
+function teams(){
+ let h='<h2>Teams</h2>';
+ S.teams.forEach((n,i)=>{h+=ED?`<div style="margin:4px 0"><input data-nm=${i} value="${esc(n)}" placeholder="Team ${i+1}"></div>`:n.trim()?`<div class=cd style="padding:7px 10px">${esc(n)}</div>`:''});
+ h+='<h2>Playoffs (Week 21)</h2>';
+ ['🥇 1st · $125','🥈 2nd · $50','🥉 3rd · $25'].forEach((l,i)=>{h+=`<div style="display:flex;gap:8px;align-items:center;margin:5px 0"><span style="width:110px">${l}</span>${ED?`<select data-po=${i}>${opts(S.po[i])}</select>`:`<b>${S.po[i]!==''?esc(tn(S.po[i])):'TBD'}</b>`}</div>`});
+ return h+'<p><small>League pot $300 = $5 × 20 weekly challenges + $200 playoff pool.</small></p>';
+}
+
+function render(){
+  const v={home,chal,scores,teams}[tab]();
+  // header toolbar
+  const editOnClass = ED ? 'on' : '';
+  const header = `<div style="display:flex;gap:12px;align-items:center"><span class=ball>🏀</span><div><h1>BFBL</h1><small>HOOPS HUB · DYNAMIC SCORING</small></div></div>
+    <div class="hd-tools">
+      <button id="btn-edit" class="${editOnClass}">${ED? 'Editing (ON)':'Edit'}</button>
+      <button id="btn-export-json">Export state</button>
+      <button id="btn-export-html">Export HTML</button>
+      <button id="btn-import">Import state</button>
+      <input id="file-import" class="hidden-file" type="file" accept="application/json">
+    </div>`;
+  $('app').innerHTML=`<div class=hd>${header}</div><div class=court></div><main>${v}</main>`+(ED&&dirty?'<button class="btn fab" data-save>💾 SAVE</button>':'')+`<nav>${[['home','🏆','STANDINGS'],['chal','💰','CHALLENGES'],['scores','📋','SCORES'],['teams','👥','TEAMS']].map(([k,i,l])=>`<b class="${k==tab?'on':''}" data-go=${k}><i>${i}</i>${l}</b>`).join('')}</nav>`;
+
+  // wire header buttons (they're re-rendered)
+  const be = document.getElementById('btn-edit');
+  if(be) be.addEventListener('click', ()=>{ toggleEdit(); });
+  const bex = document.getElementById('btn-export-json');
+  if(bex) bex.addEventListener('click', ()=>exportStateJSON());
+  const bexh = document.getElementById('btn-export-html');
+  if(bexh) bexh.addEventListener('click', ()=>exportFullHTML());
+  const bimp = document.getElementById('btn-import');
+  const finp = document.getElementById('file-import');
+  if(bimp && finp){
+    bimp.addEventListener('click', ()=> finp.click() );
+    finp.addEventListener('change', (ev)=>{ const f = ev.target.files && ev.target.files[0]; if(f) importStateFile(f); ev.target.value=''; });
+  }
+}
+
+document.addEventListener('click', e=>{
+  if(e.target.closest('.ball')) { try{ const a=new AudioContext(), o=a.createOscillator(); o.type='sawtooth'; o.frequency.value=170; o.connect(a.destination); o.start(); setTimeout(()=>o.stop(),650);}catch(e){}; return; }
+  const d=e.target.closest('[data-go],[data-wk],[data-add],[data-del],[data-save]');
+  if(!d) return;
+  const D=d.dataset;
+  if(D.go){ tab=D.go; scrollTo(0,0); }
+  else if(D.wk) WK=+D.wk;
+  else if(D.add!==undefined){ (S.w[WK]=S.w[WK]||[]).push({a:'',b:'',A:{},B:{}}); dirty=true }
+  else if(D.del!==undefined){ S.w[WK].splice(+D.del,1); dirty=true }
+  else if(D.save!==undefined){ if(saveState()) alert('Saved to localStorage'); }
+  render();
+});
+
+document.addEventListener('change', e=>{
+  const D=e.target.dataset, v=e.target.value;
+  if(D.ab!==undefined){ S.w[WK][+D.m][D.ab] = v==='' ? '' : +v; dirty=true; render(); }
+  else if(D.tb) { S.tb[D.tb] = v; dirty=true; render(); }
+  else if(D.po) { S.po[+D.po] = v==='' ? '' : +v; dirty=true; render(); }
+});
+
+document.addEventListener('input', e=>{
+  const D=e.target.dataset, v=e.target.value;
+  if(D.nm!==undefined){ S.teams[+D.nm]=v; mark(); }
+  else if(D.k){ const m=S.w[WK][+D.m]; m[D.s][D.k]=v; const s=$('sum'+D.m); if(s) s.textContent=sumT(m); mark(); }
+});
+
+WK = calc().latest || 1;
+render();
+
+/* end */
+</script>
+</body></html>
